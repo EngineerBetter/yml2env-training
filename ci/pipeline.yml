@@ -15,6 +15,15 @@ resources:
   source:
     uri: http://training-box-gogs/student/yml2env
     branch: master
+- name: release-candidate
+  type: s3
+  source:
+    endpoint: training-box-minio:9000
+    disable_ssl: true
+    bucket: release-candidates
+    regexp: yml2env-(.*)
+    access_key_id: "123456"
+    secret_access_key: qwertyui
 
 jobs:
 - name: build-image
@@ -41,6 +50,8 @@ jobs:
       # Tell Concourse which things to mount into the container
       inputs:
       - name: cli-code
+      outputs:
+      - name: built-binary
 
       # Run a shell script to compile the code
       run:
@@ -52,4 +63,7 @@ jobs:
           mv cli-code/* src/github.com/EngineerBetter/yml2env
           export GOPATH=$PWD
           cd src/github.com/EngineerBetter/yml2env
-          go build
+          go build -o $OLDPWD/built-binary/yml2env-$(date +%s)
+  - put: release-candidate
+    params:
+      file: built-binary/yml2env-*
