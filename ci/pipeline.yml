@@ -92,6 +92,7 @@ jobs:
     passed: [compile]
     trigger: true
   - task: test
+    attempts: 10
     config:
       platform: linux
       image_resource:
