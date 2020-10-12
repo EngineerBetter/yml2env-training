@@ -37,15 +37,9 @@ jobs:
   plan:
   - get: cli-code
   - task: go-build
+    image: golang-image
     config:
       platform: linux
-
-      # Define the Docker image to use as the filesystem for this task
-      image_resource:
-        type: docker-image
-        source:
-          repository: training-box-docker-registry:5000/student/golang-image
-          insecure_registries: [ "training-box-docker-registry:5000" ]
 
       # Tell Concourse which things to mount into the container
       inputs:
