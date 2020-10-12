@@ -1,0 +1,8 @@
+---
+roles:
+- name: owner
+  local:
+    users: ["teamlead"]
+- name: viewer
+  local:
+    users: ["developer"]
