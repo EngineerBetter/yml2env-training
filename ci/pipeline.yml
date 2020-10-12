@@ -30,6 +30,15 @@ resources:
     regexp: yml2env-(.*)
     access_key_id: "123456"
     secret_access_key: qwertyui
+- name: test-report
+  type: s3
+  source:
+    endpoint: training-box-minio:9000
+    disable_ssl: true
+    bucket: test-reports
+    regexp: junit-(.*)
+    access_key_id: "123456"
+    secret_access_key: qwertyui
 - name: send-email
   type: email
   source:
@@ -93,14 +102,20 @@ jobs:
       inputs:
       - name: cli-code
         path: gopath/src/github.com/EngineerBetter/yml2env
+      outputs:
+      - name: test-report
       run:
         path: gopath/src/github.com/EngineerBetter/yml2env/test.sh
     params:
       FIXTURE_LOCATION: fixtures/
       FLAKE: some-value
     on_failure:
-      put: send-email
-      params:
-        to: [concoursetraining@mailsac.com]
-        subject_text: Concourse Training
-        body_text: Some text
+      do:
+      - put: send-email
+        params:
+          to: [concoursetraining@mailsac.com]
+          subject_text: Concourse Training
+          body_text: Some text
+      - put: test-report
+        params:
+          file: test-report/junit-*.xml
