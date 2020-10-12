@@ -1,4 +1,10 @@
 ---
+resource_types:
+- name: email
+  type: docker-image
+  source:
+    repository: mdomke/concourse-email-resource
+
 resources:
 - name: docker-file-repo
   type: git
@@ -24,6 +30,10 @@ resources:
     regexp: yml2env-(.*)
     access_key_id: "123456"
     secret_access_key: qwertyui
+- name: send-email
+  type: email
+  source:
+    from: ci@example.com
 
 jobs:
 - name: build-image
@@ -88,3 +98,9 @@ jobs:
     params:
       FIXTURE_LOCATION: fixtures/
       FLAKE: some-value
+    on_failure:
+      put: send-email
+      params:
+        to: [concoursetraining@mailsac.com]
+        subject_text: Concourse Training
+        body_text: Some text
