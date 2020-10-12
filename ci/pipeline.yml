@@ -38,6 +38,7 @@ jobs:
   - get: cli-code
   - get: golang-image
     passed: [build-image]
+    trigger: true
   - task: go-build
     image: golang-image
     config:
@@ -68,6 +69,7 @@ jobs:
   plan:
   - get: cli-code
     passed: [compile]
+    trigger: true
   - task: test
     config:
       platform: linux
