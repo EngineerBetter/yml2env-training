@@ -37,6 +37,7 @@ jobs:
   plan:
   - get: cli-code
   - get: golang-image
+    passed: [build-image]
   - task: go-build
     image: golang-image
     config:
