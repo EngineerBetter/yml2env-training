@@ -60,28 +60,12 @@ jobs:
   - get: golang-image
     passed: [build-image]
     trigger: true
+  - task: lint
+    image: golang-image
+    file: cli-code/lint.yml
   - task: go-build
     image: golang-image
-    config:
-      platform: linux
-
-      # Tell Concourse which things to mount into the container
-      inputs:
-      - name: cli-code
-      outputs:
-      - name: built-binary
-
-      # Run a shell script to compile the code
-      run:
-        path: /bin/sh
-        args:
-        - -xc
-        - |
-          mkdir -p src/github.com/EngineerBetter/yml2env
-          mv cli-code/* src/github.com/EngineerBetter/yml2env
-          export GOPATH=$PWD
-          cd src/github.com/EngineerBetter/yml2env
-          go build -o $OLDPWD/built-binary/yml2env-$(date +%s)
+    file: cli-code/compile.yml
   - put: release-candidate
     params:
       file: built-binary/yml2env-*
