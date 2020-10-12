@@ -52,6 +52,7 @@ jobs:
       build: docker-file-repo
 
 - name: compile
+  public: true
   plan:
   - get: cli-code
     trigger: true
