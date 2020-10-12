@@ -122,13 +122,3 @@ func run(envVars []string, args []string) error {
 
 	return cmd.Wait()
 }
-
-func max(a, b int) int {
-	x := b
-	if a > b {
-		x = a
-	} else {
-		x = a
-	}
-	return x
-}
