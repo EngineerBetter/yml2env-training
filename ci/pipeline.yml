@@ -67,6 +67,7 @@ jobs:
 - name: test
   plan:
   - get: cli-code
+    passed: [compile]
   - task: test
     config:
       platform: linux
