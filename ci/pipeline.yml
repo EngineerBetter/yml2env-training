@@ -87,3 +87,4 @@ jobs:
         path: gopath/src/github.com/EngineerBetter/yml2env/test.sh
     params:
       FIXTURE_LOCATION: fixtures/
+      FLAKE: some-value
